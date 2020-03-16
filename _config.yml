@@ -4,7 +4,7 @@ SEOTitle: odin的博客 | odin Blog
 header-img: img/home-bg1.jpg
 email: cossmaya@sina.com
 description: "关于程序与设计、吃与睡 | 这里是 Odin 的个人博客，与你一起发现更有趣的世界。"
-keyword: "博客, 个人网站, 互联网, Web, 后端, 设计, 架构"
+keyword: "博客, 互联网, web, 中间件, 后端, 设计, 架构"
 url: "https://odinfor.github.io"              # your host, for absolute URL
 baseurl: "https://odinfor.github.io"                             # for example, '/blog' if your blog hosted on 'host/blog'
 
