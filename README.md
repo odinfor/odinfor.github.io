@@ -1,6 +1,6 @@
 ## odin's blog
 
-使用黄玄的blog模板，原README.md参考README.zh.md
+odin的博客，记录一些笔记和感悟。
 
 ## 感谢
 
