@@ -157,7 +157,7 @@ InnoDB 最小的锁粒度是行锁，MyISAM 最小的锁粒度是表锁。一个
 * 尽量保持索引的顺序。
 
 > 首先解释什么是mysql最左前缀原则
-> []({{site.baseurl}}/img/in-post/post-database/left.jpg)
+> ![]({{site.baseurl}}/img/in-post/post-database/left.jpg)
 > 假设有上述复合索引结构，分别为：年龄、国家、姓名。当我们通过复合索引查找数据时，mysql会按照复合索引的顺序进行查找。如：优先查找年龄，再查找国家，再查找姓名的逻辑进行。不能跳过前面的索引。
 > 这就是mysql的最左前缀原则。
 
