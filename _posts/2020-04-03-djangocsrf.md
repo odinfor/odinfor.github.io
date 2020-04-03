@@ -61,26 +61,3 @@ from django.template.context_processors import csrf
 def ajax_demo(request):
     return render(request, 'post_demo.html', csrf(request))
 ```
-
-**前端**
-
-```javascript
- $('#send').click(function(){        
-    $.ajax({
-        type: 'POST',
-        url:'{% url 'ajax:post_data' %}',
-        data: {
-                username: $('#username').val(),
-                content: $('#content').val(),
-               'csrfmiddlewaretoken': '{{ csrf_token }}'  关键点
-            },
-        dataType: 'json',
-        success: function(data){
-
-        },
-        error: function(){
-    
-        }
-    });
- });
-``` 
