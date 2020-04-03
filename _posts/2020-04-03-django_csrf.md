@@ -57,7 +57,7 @@ from django.shortcuts import render
 from django.template.context_processors import csrf
 
 def ajax_demo(request):
-     # csrf(request)构造出{‘csrf_token’: token}
+    # csrf(request)构造出{"csrf_token": token}
     return render(request, 'post_demo.html', csrf(request))
 ```
 
@@ -97,9 +97,9 @@ def ajax_demo(request):
 ```
 
 ```javaScript
+//前端
 //在进行post提交时，获取Cookie当中的csrftoken并在请求中添加X-CSRFToken请求头, 该请求头的数据就是csrftoken。
 //通过$.ajaxSetup方法设置AJAX请求的默认参数选项，在每次ajax的POST请求时，添加X-CSRFToken请求头
-
 <script type="text/javascript">
     $(function(){
 
