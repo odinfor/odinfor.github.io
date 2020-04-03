@@ -8,13 +8,11 @@ tags:
   - python
 ---
 
-![]({{site.baseurl}}/img/in-post/post-python/django-girls.jpg)
-
 在django中对post请求不加任何修饰时，一定会得到403 Forbidden的返回。通常我们需要设置csrf。对csrf的设置常见措施有以下几种：
 * 全局禁用csrf。在setting.py配置文件中的MIDDLEWARE中注释`django.middleware.csrf.CsrfViewMiddleware`。当然这个方法比较少见也不推荐。
 * 对指定的post请求取消csrf验证
     1. 方式一：在接口上添加装饰器`@csrf_exempt`对该接口取消csrf验证。
-    2. 方式二：在路由上取消，如：`url(r'^post/get_data/$', csrf_exempt(post_data), name='post_data'),`
+    2. 方式二：在路由上取消，如：`url(r'^post/get_data/$', csrf_exempt(post_data), name='post_data')`。
 * 对指定的psot请求添加装饰器`@requires_csrf_token(view)`添加csrf验证。
 
 那么什么是csrf？为什么需要csrf呢？
