@@ -7,6 +7,7 @@ header-style: text
 tags:
   - python
 ---
+
 ![]({{site.baseurl}}/img/in-post/post-python/django-girls.jpg)
 
 在django中对post请求不加任何修饰时，一定会得到403 Forbidden的返回。通常我们需要设置csrf。对csrf的设置常见措施有以下几种：
