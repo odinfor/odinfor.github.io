@@ -52,7 +52,7 @@ Django是通过添加校验token的方法来防御csrf攻击的。
 
 ##### 在表单中附加csrftoken
 
-```
+```python
 from django.shortcuts import render
 from django.template.context_processors import csrf
 
@@ -62,8 +62,7 @@ def ajax_demo(request):
 
 **前端**
 ```
-  $('#send').click(function(){
-                
+$('#send').click(function(){        
     $.ajax({
         type: 'POST',
         url:'{% url 'ajax:post_data' %}',
@@ -79,14 +78,13 @@ def ajax_demo(request):
         error: function(){
     
         }
-    
     });
-  });
+});
 ```
 
 ##### 在request请求中添加X-CSRFToken请求头
 **后端**
-```
+```python
 from django.shortcuts import render
 from django.views.decorators.csrf import ensure_csrf_cookie
 
