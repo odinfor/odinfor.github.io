@@ -39,8 +39,7 @@ WSGI协议其实是定义了一种server与application解耦的规范，上图�
 
 ##### django WSGI application
 
-
-WSGI application应该实现为一个可调用对象，例如函数、方法、类(包含`call`方法)。需要接收两个参数：一个字典，该字典可以包含了客户端请求的信息以及其他信息，可以认为是请求上下文，一般叫做environment（编码中多简写为environ、env）一个用于发送HTTP响应状态（HTTP status ）、响应头（HTTP headers）的回调函数通过回调函数将响应状态和响应头返回给server，同时返回响应正文(response body)，响应正文是可迭代的、并包含了多个字符串。下面是Django中application的具体实现部分：
+`WSGI application`应该实现为一个可调用对象，例如函数、方法、类(包含`call`方法)。需要接收两个参数：一个字典，该字典可以包含了客户端请求的信息以及其他信息，可以认为是请求上下文，一般叫做environment（编码中多简写为environ、env）一个用于发送HTTP响应状态（HTTP status ）、响应头（HTTP headers）的回调函数通过回调函数将响应状态和响应头返回给server，同时返回响应正文(response body)，响应正文是可迭代的、并包含了多个字符串。下面是Django中application的具体实现部分：
 
 ```python
 class WSGIHandler(base.BaseHandler):
@@ -86,7 +85,7 @@ class WSGIHandler(base.BaseHandler):
         return response
 ```
 
-可以看出application的流程包括:加载所有中间件，以及执行框架相关的操作，设置当前线程脚本前缀，发送请求开始信号；处理请求，调用get_response()方法处理当前请求，该方法的的主要逻辑是通过urlconf找到对应的view和callback，按顺序执行各种middleware和callback。调用由server传入的start_response()方法将响应header与status返回给server。返回响应正文
+可以看出application的流程包括:加载所有中间件，以及执行框架相关的操作，设置当前线程脚本前缀，发送请求开始信号；处理请求，调用`get_response()`方法处理当前请求，该方法的的主要逻辑是通过`urlconf`找到对应的`view`和`callback`，按顺序执行各种`middleware`和`callback`。调用由`server`传入的`start_response()`方法将响应header与status返回给server。返回响应正文
 
 ##### django WSGI Server
 
@@ -114,29 +113,29 @@ def run(addr, port, wsgi_handler, ipv6=False, threading=False):
 
 
 **WSGIServerr**
-run()方法会创建WSGIServer实例，主要作用是接收客户端请求，将请求传递给application，然后将application返回的response返回给客户端。
-* 创建实例时会指定HTTP请求的handler：WSGIRequestHandler类
-* 通过set_app和get_app方法设置和获取WSGIApplication实例wsgi_handler
-* 处理http请求时，调用handler_request方法，会创建WSGIRequestHandler实例处理http请求。
-* WSGIServer中get_request方法通过socket接受请求数据。
+`run()`方法会创建`WSGIServer`实例，主要作用是接收客户端请求，将请求传递给`application`，然后将`application`返回的response返回给客户端。
+* 创建实例时会指定HTTP请求的`handler：WSGIRequestHandler`类
+* 通过`set_app`和`get_app`方法设置和获取`WSGIApplication`实例`wsgi_handler`
+* 处理http请求时，调用`handler_request`方法，会创建`WSGIRequestHandler`实例处理http请求。
+* `WSGIServer`中`get_request`方法通过`socket`接受请求数据。
 
 **WSGIRequestHandler**
-* 由WSGIServer在调用handle_request时创建实例，传入request、cient_address、WSGIServer三个参数，__init__方法在实例化同时还会调用自身的handle方法。
-* handle方法会创建ServerHandler实例，然后调用其run方法处理请求
+* 由`WSGIServer`在调用`handle_request`时创建实例，传入`request`、`cient_address`、`WSGIServer`三个参数，__init__方法在实例化同时还会调用自身的handle方法。
+* `handle`方法会创建`ServerHandler`实例，然后调用其`run`方法处理请求
 
 **ServerHandler**
-* WSGIRequestHandler在其handle方法中调用run方法，传入self.server.get_app()参数，获取WSGIApplication，然后调用实例(__call__)，获取response，其中会传入start_response回调，用来处理返回的header和status。
-* 通过application获取response以后，通过finish_response返回response
+* `WSGIRequestHandler`在其handle方法中调用run方法，传入`self.server.get_app()`参数，获取WSGIApplication，然后调用实例`(__call__)`，获取response，其中会传入start_response回调，用来处理返回的header和status。
+* 通过application获取response以后，通过`finish_response`返回response
 
 **WSGIHandler**
-* WSGI协议中的application，接收两个参数，environ字典包含了客户端请求的信息以及其他信息，可以认为是请求上下文，start_response用于发送返回status和header的回调函数。
+* `WSGI`协议中的`application`，接收两个参数，environ字典包含了客户端请求的信息以及其他信息，可以认为是请求上下文，`start_response`用于发送返回status和header的回调函数。
 
 虽然上面一个WSGI server涉及到多个类实现以及相互引用，但其实原理还是调用WSGIHandler，传入请求参数以及回调方法start_response()，并将响应返回给客户端。
 
 ###### django simple_server
 
 django的simple_server.py模块实现了一个简单的HTTP服务器，并给出了一个简单的demo，可以直接运行，运行结果会将请求中涉及到的环境变量在浏览器中展示出来。
-其中包括上述描述的整个http请求的所有组件:ServerHandler, WSGIServer, WSGIRequestHandler，以及demo_app表示的简易版的WSGIApplication。
+其中包括上述描述的整个http请求的所有组件:`ServerHandler`, `WSGIServer`, WSGIRequestHandler，以及demo_app表示的简易版的`WSGIApplication`。
 可以看一下整个流程：
 
 ```python
