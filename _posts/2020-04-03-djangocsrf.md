@@ -60,3 +60,101 @@ from django.template.context_processors import csrf
 def ajax_demo(request):
     return render(request, 'post_demo.html', csrf(request))
 ```
+
+**前端**
+```javaScript
+$('#send').click(function(){        
+    $.ajax({
+        type: 'POST',
+        url:'{% url 'ajax:post_data' %}',
+        data: {
+                username: $('#username').val(),
+                content: $('#content').val(),
+               'csrfmiddlewaretoken': '{{ csrf_token }}'  关键点
+            },
+        dataType: 'json',
+        success: function(data){
+
+        },
+        error: function(){
+    
+        }
+    });
+});
+```
+
+##### 在request请求中添加X-CSRFToken请求头
+
+**后端**
+```python
+from django.shortcuts import render
+from django.views.decorators.csrf import ensure_csrf_cookie
+
+@ensure_csrf_cookie
+def ajax_demo(request):
+    return render(request, 'ajax_demo.html')
+```
+
+**前端**
+```javaScript
+//在进行post提交时，获取Cookie当中的csrftoken并在请求中添加X-CSRFToken请求头, 该请求头的数据就是csrftoken。
+//通过$.ajaxSetup方法设置AJAX请求的默认参数选项，在每次ajax的POST请求时，添加X-CSRFToken请求头
+<script type="text/javascript">
+    $(function(){
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        <!--获取csrftoken-->
+        var csrftoken = getCookie('csrftoken');
+        console.log(csrftoken);
+
+        //Ajax call
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        $.ajaxSetup({
+            crossDomain: false, // obviates need for sameOrigin test
+            //请求前触发
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type)) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                }
+            }
+        });
+
+        $('#send').click(function(){
+            console.log($("#comment_form").serialize());
+
+            $.ajax({
+                type: 'POST',
+                url:'{% url 'ajax:post_data' %}',
+                data: {
+                        username: $('#username').val(),
+                        content: $('#content').val(),
+                       //'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                dataType: 'json',
+                success: function(data){ 
+                },
+                error: function(){
+                }
+            });
+        });
+    });
+</script>
+```
