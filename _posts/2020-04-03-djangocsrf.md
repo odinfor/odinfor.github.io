@@ -51,7 +51,7 @@ Django是通过添加校验token的方法来防御csrf攻击的。
 2. 通过request请求中添加X-CSRFToken请求头。
 
 ##### 在表单中附加csrftoken
-
+**后端**
 ```python
 from django.shortcuts import render
 from django.template.context_processors import csrf
