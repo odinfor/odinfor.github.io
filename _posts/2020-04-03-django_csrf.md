@@ -57,7 +57,7 @@ from django.shortcuts import render
 from django.template.context_processors import csrf
 
 def ajax_demo(request):
-    # csrf(request)构造出{"csrf_token": token}
+    """csrf(request)构造出{"csrf_token": token}"""
     return render(request, 'post_demo.html', csrf(request))
 ```
 
