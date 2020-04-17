@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "「devops」argo workflow笔记(二)"
+title: "argo workflow笔记(二)"
 subtitle: 'argo adls模板示例'
 author: "odin"
 header-style: text

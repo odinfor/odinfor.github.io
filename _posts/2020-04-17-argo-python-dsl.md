@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "「devops」argo workflow笔记(四)"
+title: "argo workflow笔记(四)"
 subtitle: 'argo python adls支持库分析'
 author: "odin"
 header-style: text
