@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "「中间件」redis集群模式"
+title: "redis集群模式"
 subtitle: 'redis的主流的集群模式分析'
 author: "odin"
 header-style: text
