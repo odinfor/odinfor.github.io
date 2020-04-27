@@ -50,7 +50,7 @@ func leak() {
  }
 ```
 上面这个`leak`函数，启动了一个`goroutine`，该`goroutine`阻塞等待接收`channel`发送的数据，`leak执`行结束`val`被清除，`goroutine`将没有接收对象，`channel`永远不会被关闭，`goroutine`被锁死。造成泄漏。
-通过这个基本的示例，能大致对goroutine泄漏有一个基本的概念。我们**永远不要在不知道如何停止的情况下去开启一个goroutine**
+通过这个基本的示例，能大致对`goroutine`泄漏有一个基本的概念。我们**永远不要在不知道如何停止的情况下去开启一个goroutine**
 
 #### 示例二
 针对无缓冲的channel的场景示例：
@@ -97,10 +97,10 @@ func process(term string) error {
 }
 ```
 
-process函数创建Context在100ms内取消上下文，然后在第 17 行，程序创建一个无缓冲的 channel，允许 Goroutines 传递 result 类型的数据。在第 21 到 24 行，定义了匿名函数，此处称为 Goroutine。此 Goroutine 调用 search 函数并尝试通过第 23 行的 channel 发送其返回值。
-当 Goroutine 正在执行其工作时，process 函数执行第 28 行上的 select 模块。该模块有两种情况，它们都是 channel 接收操作。在第 29 行，有一个从 ctx.Done() channel 接收的 case。如果上下文被取消（100 ms 持续时间到达），将执行此 case。如果执行此 case，则 process 函数将返回错误，代表着取消了等待第 30 行的 search。或者，第 31 行上的 case 从 ch channel 接收并将值分配给名为 result 的变量。与前面在顺序实现中一样，程序在第 32 行和第 33 行检查和处理错误。如果没有错误，程序将在第 35 行打印记录，并返回 nil 以指示成功。
-这个函数看起来没有什么问题，但是存在隐藏的 goroutine风险。关键在于17行创建的channel是一个无缓冲的channel。在24行，goroutine通过channel发送，在此channel上发送将阻塞执行，直到接收到内容，在超时的情况下，接收方停止等待goroutine的接收工作并继续执行，将导致goroutine永远阻塞等待一个永远不会发生的接收器出现。这就是隐藏的goroutine泄漏风险。
-规避这个隐藏风险只需要把channel改为有缓冲的channel即可：
+`process`函数创建`Context`在100ms内取消上下文，然后在第 `17` 行，程序创建一个无缓冲的 `channel`，允许 `Goroutines` 传递 `result` 类型的数据。在第 `23` 到 `26` 行，定义了匿名函数，此处称为 `Goroutine`. `Goroutine` 调用 `search` 函数并尝试通过第 `24` 行的 `channel` 发送其返回值。  
+当 `Goroutine` 正在执行其工作时，`process` 函数执行第 `30` 行上的 `select` 模块。该模块有两种情况，它们都是 `channel` 接收操作。在第 `31` 行，有一个从` ctx.Done() channel `接收的 `case`。如果上下文被取消（100 ms 持续时间到达），将执行此 `case`。如果执行此 `case`，则 `process` 函数将返回错误，代表着取消了等待第 `32` 行的 `search`。或者，第 `33` 行上的 `case` 从 `ch channel` 接收并将值分配给名为 `result` 的变量。与前面在顺序实现中一样，程序在第 `34` 行和第 `35` 行检查和处理错误。如果没有错误，程序将在第 `37` 行打印记录，并返回 `nil` 以指示成功。  
+这个函数看起来没有什么问题，但是存在隐藏的 `goroutine`风险。关键在于`17`行创建的`channel`是一个`无缓冲的channel`。在`25`行，`goroutine`通过`channel`发送，在此`channel`上发送将阻塞执行，直到接收到内容，在超时的情况下，接收方停止等待`goroutine`的接收工作并继续执行，将导致goroutine永远阻塞等待一个永远不会发生的接收器出现。这就是隐藏的`goroutine`泄漏风险。  
+规避这个隐藏风险只需要把`channel`改为`有缓冲的channel`即可：
 ```golang
 // 为goroutine创建一个传递结果的缓冲值为1的channel，以至于发送接收不会阻塞
 ch := make(chan result, 1)
@@ -153,7 +153,7 @@ func main() {
 	time.Sleep(time.Second)
 }
 ```
-上述示例中，handle中向waitgroup中添加了2个任务，但是只有1个并发任务，最后wg.Wait()等待退出条件将无法完成，造成handle一直阻塞。本示例中任务数较少，所以比较容易一眼看出来，往往任务数较多时很容易忽略add的任务数量和并发任务数量不等。
+上述示例中，`handle`中向`waitgroup`中添加了2个任务，但是只有1个并发任务，最后`wg.Wait()`等待退出条件将无法完成，造成`handle`一直阻塞。本示例中任务数较少，所以比较容易一眼看出来，往往任务数较多时很容易忽略`add`的任务数量和并发任务数量不等。
 
 ### 总结
 大致可能造成goroutine泄漏的情况，其实无论是死循环、channel 阻塞、锁等待，只要是会造成阻塞的写法都可能产生泄露。因而，如何防止 goroutine 泄露就变成了如何防止发生阻塞。为进一步防止泄露，有些实现中会加入超时处理，主动释放处理时间太长的 goroutine。
