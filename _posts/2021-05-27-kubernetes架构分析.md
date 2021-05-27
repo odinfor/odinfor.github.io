@@ -12,11 +12,7 @@ tags:
 
 ## 1. 架构原理
 
-***
-
 Kubernetes 最初源于谷歌内部的 Borg，提供了面向应用的容器集群部署和管理系统。Kubernetes 的目标旨在消除编排物理 / 虚拟计算，网络和存储基础设施的负担，并使应用程序运营商和开发人员完全将重点放在以容器为中心的原语上进行自助运营。Kubernetes 也提供稳定、兼容的基础（平台），用于构建定制化的 workflows 和更高级的自动化任务。 Kubernetes 具备完善的集群管理能力，包括多层次的安全防护和准入机制、多租户应用支撑能力、透明的服务注册和服务发现机制、内建负载均衡器、故障发现和自我修复能力、服务滚动升级和在线扩容、可扩展的资源自动调度机制、多粒度的资源配额管理能力。 Kubernetes 还提供完善的管理工具，涵盖开发、部署测试、运维监控等各个环节。
-
-***
 
 ## 2.Borg简介
 
@@ -31,8 +27,6 @@ Borg 主要由 BorgMaster、Borglet、borgcfg 和 Scheduler 组成，如下图�
 * borgcfg 是 Borg 的命令行工具，用于跟 Borg 系统交互，一般通过一个配置文件来提交任务。
 
 ## 3.Kubernetes架构
-
-***
 
 Kubernetes 借鉴了 Borg 的设计理念，比如 Pod、Service、Labels 和单 Pod 单 IP 等。Kubernetes 的整体架构跟 Borg 非常像，如下图所示
 
@@ -60,8 +54,6 @@ kubernetes主要由以下几个核心组件：
 * `Fluentd-elasticsearch`:提供集群日志采集、存储与查询
 
 ## 4.分层架构
-
-***
 
 Kubernetes 设计理念和功能其实就是一个类似 Linux 的分层架构，如下图所示
 
