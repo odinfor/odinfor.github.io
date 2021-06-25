@@ -92,7 +92,7 @@ print("execution time: %s" % (end - start))
 
 ### 2.2)IO密集型
 
-"""python
+```python
 from threading import Thread
 import time
 
@@ -113,7 +113,7 @@ stop = time.time()
 print('execution time: %s' % (stop - start))
 
 # execution time: 2.1608619689941406
-"""
+```
 
 多个线程的执行时间都是2s左右，若是使用单线程的话执行消耗时间可想而知。
 
